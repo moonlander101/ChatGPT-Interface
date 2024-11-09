@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "dev": "nodemon --env-file=.env app.js"
+  },
+  "dependencies": {
+    "openai": "^4.71.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
