@@ -11,8 +11,10 @@ interface Message {
 
 function App() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [textareaValue, setTextareaValue] = useState<string>('');
+  const lastMessageRef = useRef<HTMLDivElement>(null);
 
+  const [textareaValue, setTextareaValue] = useState<string>('');
+  const [height, setHeight] = useState<number>(0);
   const [oldMessages , setOldMessages] = useState<Message[]>([]);
 
   const handleInput = () => {
@@ -20,7 +22,9 @@ function App() {
     if (textarea) {
       textarea.style.height = 'auto';
       textarea.style.height = `${textarea.scrollHeight}px`;
+      setHeight(textarea.scrollHeight);
       setTextareaValue(textarea.value);
+      console.log(textarea.scrollHeight);
     }
   };
 
@@ -42,6 +46,14 @@ function App() {
 
     setOldMessages(prevMessages => [...prevMessages, {role: aiResData.role, content: aiResData.content}]);
     
+    setTextareaValue('');
+    textareaRef.current!.style.height = 'auto';
+    textareaRef.current!.value = '';
+
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+
     // console.log(textareaValue);
     // setOldMessages([...oldMessages, {role: "user", content: textareaValue}]);
     // console.log(oldMessages)
@@ -51,15 +63,20 @@ function App() {
   
   return (
     <>
-      <div className='bg-[#212121] h-screen overflow-scroll'>
-            <div className='w-auto'>
+      <div className='bg-[#212121] h-screen'>
+      {/* 'w-auto overflow-y-auto max-h-[80%] min-h-[60%] scroll-m-1' */}
+            <div className={height <= 42 ? 'w-auto overflow-y-auto max-h-[80%] scroll-m-1' : 
+              (height <= 72 ? 'w-auto overflow-y-auto max-h-[75%] scroll-m-1' : (
+                height <= 96 ? 'w-auto overflow-y-auto max-h-[70%] scroll-m-1' : (
+                  height <= 96 ? 'w-auto overflow-y-auto max-h-[75%] scroll-m-1' : 'w-auto overflow-y-auto max-h-[60%] scroll-m-1')))}>
               {oldMessages.map((message, index) => {
                 return message.role === "user" ? <UserTextBubble key={index} message={message.content} /> : <ResponseText key={index} message={message.content} />
               })}
             </div>
-        <div className='w-auto h-auto flex items-end p-7 '>
+            <div ref={lastMessageRef}/>
+        <div className="flex flex-col-reverse w-full h-auto items-end p-7 fixed bottom-1">
           <form className="w-full" onSubmit={handleSubmit}>
-            <div className="flex justify-center pt-6">
+            <div className="flex justify-center">
               <div className='bg-[#2F2F2F] p-3 w-4/5 rounded-3xl max-w-[720px] flex items-end'>
                 <div className="p-1 ml-1 mr-2 rounded-lg hover:bg-[#00000033] transition-colors">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-paperclip">
@@ -71,7 +88,7 @@ function App() {
                 <textarea
                   ref={textareaRef}
                   onInput={handleInput}
-                  className="mb-[0.8%] row-span-2 resize-none h-auto w-[90%] border-none outline-none bg-inherit text-white caret-white overflow-hidden"
+                  className="mb-[0.8%] row-span-2 resize-none h-auto w-[90%] border-none outline-none bg-inherit text-white caret-white max-h-[200px] overflow-y-auto"
                   placeholder="Message Something"
                   rows={1}
                 />

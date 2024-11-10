@@ -3,6 +3,7 @@
     "dev": "nodemon --env-file=.env app.js"
   },
   "dependencies": {
+    "express": "^4.21.1",
     "openai": "^4.71.1"
   },
   "devDependencies": {
