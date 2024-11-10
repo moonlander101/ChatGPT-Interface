@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import './App.css'
 import ResponseText from './components/responseText'
 import UserTextBubble from './components/userText'
+import Logo from './components/logo';
 
 interface Message {
   role: string;
@@ -31,6 +32,7 @@ function App() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (textareaValue === "") return;
+    textareaRef.current!.value = '';
 
     setOldMessages(prevMessages => [...prevMessages, {role: "user", content: textareaValue}]);
 
@@ -47,8 +49,6 @@ function App() {
     setOldMessages(prevMessages => [...prevMessages, {role: aiResData.role, content: aiResData.content}]);
     
     setTextareaValue('');
-    textareaRef.current!.style.height = 'auto';
-    textareaRef.current!.value = '';
 
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
@@ -63,12 +63,13 @@ function App() {
   
   return (
     <>
+      <Logo />
       <div className='bg-[#212121] h-screen'>
       {/* 'w-auto overflow-y-auto max-h-[80%] min-h-[60%] scroll-m-1' */}
-            <div className={height <= 42 ? 'w-auto overflow-y-auto max-h-[80%] scroll-m-1' : 
-              (height <= 72 ? 'w-auto overflow-y-auto max-h-[75%] scroll-m-1' : (
-                height <= 96 ? 'w-auto overflow-y-auto max-h-[70%] scroll-m-1' : (
-                  height <= 96 ? 'w-auto overflow-y-auto max-h-[75%] scroll-m-1' : 'w-auto overflow-y-auto max-h-[60%] scroll-m-1')))}>
+            <div className={height <= 42 ? 'w-auto overflow-y-auto max-h-[88%] scroll-m-1' : 
+              (height <= 72 ? 'w-auto overflow-y-auto max-h-[83%] scroll-m-1' : (
+                height <= 96 ? 'w-auto overflow-y-auto max-h-[78%] scroll-m-1' : (
+                  height <= 120 ? 'w-auto overflow-y-auto max-h-[73%] scroll-m-1' : 'w-auto overflow-y-auto max-h-[68%] scroll-m-1')))}>
               {oldMessages.map((message, index) => {
                 return message.role === "user" ? <UserTextBubble key={index} message={message.content} /> : <ResponseText key={index} message={message.content} />
               })}
