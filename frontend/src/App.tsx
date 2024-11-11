@@ -25,7 +25,7 @@ function App() {
       textarea.style.height = `${textarea.scrollHeight}px`;
       setHeight(textarea.scrollHeight);
       setTextareaValue(textarea.value);
-      console.log(textarea.scrollHeight);
+      // console.log(textarea.scrollHeight);
     }
   };
 
