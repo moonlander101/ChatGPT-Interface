@@ -4,10 +4,10 @@ import { useRef, useState } from 'react';
 interface TextInputProps {
   onSubmit: (message: string) => void;
   isSubmitting: boolean;
-  heightCallBack : (newHeight : number) => void;
+  // heightCallBack : (newHeight : number) => void;
 }
 
-const TextInput = ({ onSubmit, isSubmitting, heightCallBack }: TextInputProps) => {
+const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaValue, setTextareaValue] = useState<string>('');
 //   const [height, setHeight] = useState<number>(0);
@@ -19,18 +19,18 @@ const TextInput = ({ onSubmit, isSubmitting, heightCallBack }: TextInputProps) =
       textarea.style.height = `${textarea.scrollHeight}px`;
     //   setHeight(textarea.scrollHeight);
       console.log(textarea.scrollHeight)
-      if (textarea.scrollHeight <= 24) {
-        heightCallBack(83);
-      }
-      else if (textarea.scrollHeight > 24 && textarea.scrollHeight <= 72) {
-        heightCallBack(78);
-      } else if (textarea.scrollHeight > 72 && textarea.scrollHeight <= 120) {
-        heightCallBack(73);
-      } else if (textarea.scrollHeight > 120 && textarea.scrollHeight <= 168) {
-        heightCallBack(68);
-      } else {
-        heightCallBack(60);
-      }
+      // if (textarea.scrollHeight <= 24) {
+      //   heightCallBack(85);
+      // }
+      // else if (textarea.scrollHeight > 24 && textarea.scrollHeight <= 72) {
+      //   heightCallBack(70);
+      // } else if (textarea.scrollHeight > 72 && textarea.scrollHeight <= 120) {
+      //   heightCallBack(75);
+      // } else if (textarea.scrollHeight > 120 && textarea.scrollHeight <= 168) {
+      //   heightCallBack(70);
+      // } else {
+      //   heightCallBack(65);
+      // }
       setTextareaValue(textarea.value);
     }
   };

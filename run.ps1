@@ -8,4 +8,4 @@ Start-Sleep -Seconds 2
 
 # Step 3: Change to the second directory and run npm run dev
 Write-Host "Navigating to the second directory and running 'npm run dev'..."
-Start-Process powershell -ArgumentList '-NoExit', '-Command', 'npm run dev; cd ../backend; npm run dev'
+Start-Process powershell -ArgumentList '-NoExit', '-Command', 'cd ../backend; npm run dev'

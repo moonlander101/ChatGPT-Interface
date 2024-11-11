@@ -14,17 +14,17 @@ function App() {
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [oldMessages, setOldMessages] = useState<Message[]>([]);
-  const [height, setHeight] = useState<number>(83);
+  // const [height, setHeight] = useState<number>(85);
 
   const scrollToEnd = () => {
     if (lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }
-  const changeHeight = (newHeight : number) => {
-    console.log(newHeight)
-    setHeight(newHeight);
-  }
+  // const changeHeight = (newHeight : number) => {
+  //   console.log(newHeight)
+  //   setHeight(newHeight);
+  // }
 
   const handleSubmit = async (message: string) => {
     setIsSubmitting(true);
@@ -53,18 +53,18 @@ function App() {
 
   return (
     <>
-      <Logo />
-      <div className="bg-[#212121] h-screen">
-        <div className={`w-auto overflow-y-auto max-h-[${height}%]`}>
+      <div className="bg-[#212121] h-screen flex flex-col justify-between">
+        <Logo />
+        <div className="flex-1 w-auto overflow-y-auto">
           {oldMessages.map((message, index) => (
-            message.role === "user" 
+            message.role === "user"
               ? <UserTextBubble key={index} message={message.content} />
               : <ResponseText key={index} message={message.content} />
           ))}
-          <div ref={lastMessageRef} />
+          <div ref={lastMessageRef}/>
         </div>
-        <div className="flex flex-col-reverse w-full h-auto items-end p-7 fixed bottom-1">
-          <TextInput onSubmit={handleSubmit} isSubmitting={isSubmitting} heightCallBack={changeHeight}/>
+        <div className="w-full p-7">
+          <TextInput onSubmit={handleSubmit} isSubmitting={isSubmitting}/>
         </div>
       </div>
     </>
