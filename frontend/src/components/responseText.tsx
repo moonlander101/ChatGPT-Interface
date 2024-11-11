@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Markdown from 'react-markdown'
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
 import {coldarkDark} from 'react-syntax-highlighter/dist/esm/styles/prism'
+import './prism-coldark-dark.css'
 
 function ResponseText({ message } : {message : string}) {
     useEffect(()=>{
@@ -51,6 +52,7 @@ function ResponseText({ message } : {message : string}) {
                                         fontSize : "14px"
                                     }}
                                     wrapLongLines={true}
+                                    useInlineStyles={false}
                                     />
                                 </div>
                                 ) : (
