@@ -35,6 +35,15 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
     }
   };
 
+  const onEnterPress = (e : React.KeyboardEvent) => {
+    if(e.key == "Enter" && e.shiftKey == false && textareaValue.trim() !== '' && !isSubmitting) {
+      e.preventDefault();
+      handleSubmit(e);
+    } else if (e.key == "Enter" && isSubmitting && e.shiftKey == false) {
+      e.preventDefault();
+    }
+  }
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (textareaValue.trim() !== '') {
@@ -60,6 +69,7 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
             className="mb-[0.8%] row-span-2 resize-none h-auto w-[90%] border-none outline-none bg-inherit text-white caret-white max-h-[200px] overflow-y-auto"
             placeholder="Message Something"
             rows={1}
+            onKeyDown={onEnterPress}
           />
           <button type="submit" disabled={textareaValue === "" || isSubmitting}>
             <div className={`p-1 mr-1 ml-2 rounded-lg ${textareaValue !== "" && !isSubmitting? "hover:bg-[#00000033]" : ""} transition-colors`}>
