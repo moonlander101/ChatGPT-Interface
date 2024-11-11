@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import Markdown from 'react-markdown'
+import { useEffect, lazy } from 'react';
+const Markdown = lazy(() => import('react-markdown'));
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
 import {coldarkDark} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import './prism-coldark-dark.css'
