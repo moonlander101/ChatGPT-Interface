@@ -28,14 +28,51 @@ app.get('/', (req, res) => {
 
 app.get('/clear', (req, res) => {
     clearOldMessages()
-    res.send('Old messages cleared')
+    console.log("Old messages cleared")
+    return res.end()
 })
 
+
+const OpenAI = require("openai");
+const openai = new OpenAI({
+    apiKey: process.env.OPENAI_API_KEY
+});
+
+oldMessages = []
+
 app.post('/chat', async (req, res) => {
-    const resp = await getResponse(req.body.message)
-    console.log(resp.content)
-    return res.json(resp);
-})
+  res.set({
+    'Cache-Control': 'no-cache',
+    'Content-Type': 'text/event-stream',
+    'Connection': 'keep-alive'
+  });
+  res.flushHeaders();
+
+  let localOldMessages = [...oldMessages];  // Clone to prevent cross-request issues
+
+  const message = req.body.message;
+  localOldMessages.push({ role: "user", content: message });
+
+  let om = { role: "assistant", content: "" };
+  localOldMessages.push(om);
+
+  let stream = await openai.chat.completions.create({
+      model: "gpt-4o-2024-08-06",
+      messages: [
+          { role: "system", content: "You are a helpful assistant." },
+          ...localOldMessages,
+      ],
+      stream: true
+  });
+
+  for await (const chunk of stream) {
+      // console.log(chunk.choices[0]?.delta?.content || "No content");
+      res.write(chunk.choices[0]?.delta?.content || "");
+      om.content += chunk.choices[0]?.delta?.content || "";
+  }
+
+  return res.end();
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

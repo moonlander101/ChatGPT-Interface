@@ -1,5 +1,5 @@
-import { useEffect, lazy, useState } from 'react';
-const Markdown = lazy(() => import('react-markdown'));
+import { useEffect, useState } from 'react';
+import Markdown  from 'react-markdown';
 import {Prism as SyntaxHighlighter} from 'react-syntax-highlighter'
 import {coldarkDark} from 'react-syntax-highlighter/dist/esm/styles/prism'
 import './prism-coldark-dark.css'
@@ -65,7 +65,7 @@ function ResponseText({ message } : {message : string}) {
                                                 <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
                                             </svg>
                                             ) : (
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-check"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-check-check"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
                                             )}
                                         </div>
                                         </button>

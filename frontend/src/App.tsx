@@ -32,11 +32,19 @@ function App() {
     }
   }
   
+  const handleClear = async () => {
+    console.log("clearing messages");
+    await fetch('http://localhost:3000/clear', {
+      method: 'GET',
+    });
+    console.log("cleared messages");
+    setOldMessages([]);
+  }
 
   const handleSubmit = async (message: string) => {
     setIsSubmitting(true);
 
-    setOldMessages(prevMessages => [...prevMessages, {role: "user", content: message}]);
+    setOldMessages(prevMessages => [...prevMessages, {role: "user", content: message},{role: "assistant", content: ''}]);
 
     const aiRes = await fetch('http://localhost:3000/chat', {
       method: 'POST',
@@ -46,15 +54,28 @@ function App() {
       body: JSON.stringify({ message })
     });
 
-    const aiResData = await aiRes.json() as Message;
-    setOldMessages(prevMessages => [...prevMessages, {role: aiResData.role, content: aiResData.content}]);
-    
-    // await new Promise(resolve => setTimeout(resolve, 2000));
-    // setOldMessages(prevMessages => [...prevMessages, {role: "assistant", content: markdownString}]);
+    const reader = aiRes.body!.getReader();
+    const decoder = new TextDecoder();
+
+    while (true) {
+        const { value, done } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+
+        setOldMessages(prevMessages => {
+          const updatedMessages = [...prevMessages];
+          updatedMessages[updatedMessages.length - 1] = {
+            ...updatedMessages[updatedMessages.length - 1],
+            content: updatedMessages[updatedMessages.length - 1].content + chunk,
+          };
+          return updatedMessages;
+        });
+    }
     
     setIsSubmitting(false);
     
-    scrollToEnd();
+    // scrollToEnd();
   }
 
   useEffect(() => {
@@ -87,7 +108,7 @@ function App() {
       <div className='w-[100%] h-screen flex justify-evenly'>
         <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
         <div className={`relative w-[100%]`}>
-          <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen}/>
+          <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} handleClear={handleClear}/>
           <div className="bg-[#212121] flex h-screen flex-col justify-between">
             <div className="flex-1 w-auto overflow-y-auto" ref={scrollRef}>
               <div className='w-full h-10 bg-inherit'></div>
