@@ -71,7 +71,7 @@ function ResponseText({ message } : {message : string}) {
                                         </button>
                                     </div>
                                     <SyntaxHighlighter
-                                    {...rest}
+                                    // {...rest}
                                     PreTag="div"
                                     children={String(children).replace(/\n$/, '')}
                                     language={match[1]}

@@ -57,6 +57,12 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
   const onEnterPress = (e : React.KeyboardEvent) => {
     if(e.key == "Enter" && e.shiftKey == false && textareaValue.trim() !== '' && !isSubmitting) {
       e.preventDefault();
+      const textarea = textareaRef.current;
+      if (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+
       handleSubmit(e);
     } else if (e.key == "Enter" && isSubmitting && e.shiftKey == false) {
       e.preventDefault();

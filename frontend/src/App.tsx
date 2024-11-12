@@ -32,23 +32,6 @@ function App() {
     }
   }
   
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-      if (scrollTop + clientHeight < scrollHeight - 500) {
-        // console.log('at bottom');
-        if (isAtBottom === true) {
-          setIsAtBottom(false);
-        }
-      } else {
-        // console.log('not at bottom');
-        if (!isAtBottom) {
-          setIsAtBottom(true);
-        }
-      }
-      // setIsAtBottom(scrollHeight - scrollTop === clientHeight);
-    }
-  }
 
   const handleSubmit = async (message: string) => {
     setIsSubmitting(true);
@@ -72,6 +55,24 @@ function App() {
   }
 
   useEffect(() => {
+    const handleScroll = () => {
+      if (scrollRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+        if (scrollTop + clientHeight < scrollHeight - 500) {
+          // console.log('at bottom');
+          if (isAtBottom === true) {
+            setIsAtBottom(false);
+          }
+        } else {
+          // console.log('not at bottom');
+          if (!isAtBottom) {
+            setIsAtBottom(true);
+          }
+        }
+        // setIsAtBottom(scrollHeight - scrollTop === clientHeight);
+      }
+    }
+
     if (scrollRef.current) {
       scrollRef.current.addEventListener('scroll', handleScroll);
     }
@@ -94,7 +95,7 @@ function App() {
               ))}
               <div ref={lastMessageRef}/>
             </div>
-            <div className="w-full p-7 relative">
+            <div className="w-full pb-7 pt-4 relative">
               <ScrollButton isAtBottom={isAtBottom} onClick={scrollToEnd}/>
               <TextInput onSubmit={handleSubmit} isSubmitting={isSubmitting}/>
             </div>
