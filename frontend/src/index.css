@@ -6,6 +6,10 @@
     border: 1px solid red;
 } */
 
+*::selection {
+    background-color: #175B65;
+}
+
 .markdown * {
     padding : 5px 5px 5px 0px;
 }

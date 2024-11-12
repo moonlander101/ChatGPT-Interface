@@ -17,7 +17,7 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
       // Set a timeout for 1 second to show the tooltip
       timeoutRef.current = window.setTimeout(() => {
           setShowTooltip(true);
-      }, 1000);
+      }, 500);
   };
 
   const handleMouseOut = () => {

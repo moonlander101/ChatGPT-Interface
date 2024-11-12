@@ -1,10 +1,9 @@
 function ScrollButton({isAtBottom, onClick}: {isAtBottom: boolean, onClick: () => void}) {
     return (
         <div
-            className="w-8 h-8 transform-all absolute left-[46%] md:left-[47%] lg:left-[48%] xl:left-[48.5%] -top-10 bg-black rounded-full"
-            hidden={isAtBottom}
+            className={`w-8 h-8 transform-all absolute left-[46%] md:left-[47%] lg:left-[48%] xl:left-[48.5%] -top-10 bg-black rounded-full transition-opacity duration-300 ${isAtBottom ? 'opacity-0' : 'opacity-100'}`}
         >
-            <button className="w-full h-full text-white" onClick={onClick}>
+            <button className="w-full h-full text-white" onClick={onClick} disabled={isAtBottom}>
                 <div className="w-full flex justify-center">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -12,8 +11,8 @@ function ScrollButton({isAtBottom, onClick}: {isAtBottom: boolean, onClick: () =
                         height="22"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="currentColor"
-                        stroke-width="1"
+                        stroke="white"
+                        stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
                         className="lucide lucide-arrow-down"

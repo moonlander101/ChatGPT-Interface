@@ -2,10 +2,11 @@ import { useState, useRef, useEffect } from 'react';
 import './App.css'
 import ResponseText from './components/responseText'
 import UserTextBubble from './components/userText'
-import Logo from './components/logo';
+import Navbar from './components/Navbar';
 import TextInput from './components/TextInput';
 import Sidebar from './components/Sidebar';
 import ScrollButton from './components/ScrollButton';
+import { markdownString } from './components/Test';
 
 interface Message {
   role: string;
@@ -18,9 +19,8 @@ function App() {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [oldMessages, setOldMessages] = useState<Message[]>([]);
-  // const [height, setHeight] = useState<number>(85);
   const [isAtBottom, setIsAtBottom] = useState<boolean>(true);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -47,8 +47,11 @@ function App() {
     });
 
     const aiResData = await aiRes.json() as Message;
-
     setOldMessages(prevMessages => [...prevMessages, {role: aiResData.role, content: aiResData.content}]);
+    
+    // await new Promise(resolve => setTimeout(resolve, 2000));
+    // setOldMessages(prevMessages => [...prevMessages, {role: "assistant", content: markdownString}]);
+    
     setIsSubmitting(false);
     
     scrollToEnd();
@@ -84,7 +87,7 @@ function App() {
       <div className='w-[100%] h-screen flex justify-evenly'>
         <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
         <div className={`relative w-[100%]`}>
-          <Logo toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen}/>
+          <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen}/>
           <div className="bg-[#212121] flex h-screen flex-col justify-between">
             <div className="flex-1 w-auto overflow-y-auto" ref={scrollRef}>
               <div className='w-full h-10 bg-inherit'></div>

@@ -9,6 +9,12 @@ function Sidebar({ sidebarOpen, toggleSidebar }: { sidebarOpen: boolean, toggleS
                 </div>
             </button>
         </div>
+        {/* <div className="relative">
+                <div className="w-8 h-8 rounded-full absolute
+                                border-4 border-solid border-[#212121] top-0"></div>
+                <div className="w-8 h-8 rounded-full animate-spin absolute
+                                border-4 border-solid border-[#ececec] border-t-transparent top-0"></div>
+            </div> */}
       </div>
     </>
   );
