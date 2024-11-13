@@ -14,6 +14,11 @@
     padding : 5px 5px 5px 0px;
 }
 
+.markdown a {
+    color: #7AB7FF;
+    text-decoration: none;
+}
+
 .markdown code {
     background-color: #424242;
     padding: 3px;

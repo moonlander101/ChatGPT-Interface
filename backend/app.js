@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const {getResponse,clearOldMessages} = require('./controllers/getResponse')
+const {getResponse,clearOldMessages, getStreamedResponse} = require('./controllers/responseController')
 
 const corsMiddleWare = (req,res,next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Allow only the specified origin
@@ -21,21 +21,20 @@ const corsMiddleWare = (req,res,next) => {
 app.use(express.json())
 app.use(corsMiddleWare)
 
-
+// s
 app.get('/', (req, res) => {
   res.send('My api works bro')
 })
 
-app.get('/clear', (req, res) => {
-    clearOldMessages()
-    res.send('Old messages cleared')
+app.post('/clear', async (req, res) => {
+    await clearOldMessages(req,res);
+    console.log("Old messages cleared")
+    // return res.end()
 })
 
 app.post('/chat', async (req, res) => {
-    const resp = await getResponse(req.body.message)
-    console.log(resp.content)
-    return res.json(resp);
-})
+    await getStreamedResponse(req,res); 
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)

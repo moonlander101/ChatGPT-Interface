@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "nodemon --env-file=.env app.js"
+    "dev": "nodemon --env-file=.env --ignore ./database/chats app.js"
   },
   "dependencies": {
     "express": "^4.21.1",
