@@ -121,11 +121,12 @@ function App() {
       scrollToEnd();
     }
 
-    return () => {
-      if (cur) {
-        cur.removeEventListener('scroll', handleScroll);
-      }
-    };
+    // This may cause an issue later 
+    // return () => {
+    //   if (cur) {
+    //     cur.removeEventListener('scroll', handleScroll);
+    //   }
+    // };
 
   }, [oldMessages]);
 
