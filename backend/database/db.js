@@ -1,10 +1,18 @@
 const fs = require('node:fs/promises');
 const path = require('path')
 
+const CHATS_PATH = path.resolve(__dirname, './chats');
+
+fs.access(CHATS_PATH, fs.constants.F_OK)
+.catch(async (err)=>{
+    await fs.mkdir(CHATS_PATH);
+});
+
+
 const openChat = async (dateStr) => {
     let d = new Date(dateStr);
     try {
-        const chat = await fs.readFile(path.resolve(__dirname, `./chats/${dateStr}.json`), 'utf-8');
+        const chat = await fs.readFile(`${CHATS_PATH}/${dateStr}.json`, 'utf-8');
     return JSON.parse(chat);
     } catch (err) {
         console.error('bruh');
@@ -36,7 +44,7 @@ const storeChat = async (dateStr, title, messages) => {
         title,
         messages
     }
-    await fs.writeFile(path.resolve(__dirname, `./chats/${dateStr}.json`), JSON.stringify(chat));
+    await fs.writeFile(`${CHATS_PATH}/${dateStr}.json`, JSON.stringify(chat));
 }
 
 const clearChat = async (dateStr) => {

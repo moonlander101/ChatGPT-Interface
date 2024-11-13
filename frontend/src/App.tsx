@@ -45,6 +45,7 @@ function App() {
     });
     console.log("cleared messages");
     setOldMessages([]);
+    setIsAtBottom(true);
   }
 
   const handleSubmit = async (message: string) => {
@@ -80,6 +81,10 @@ function App() {
           };
           return updatedMessages;
         });
+
+        // if (isAtBottom) {
+        //   scrollToEnd();
+        // }
     }
     
     setIsSubmitting(false);
@@ -91,7 +96,7 @@ function App() {
     const handleScroll = () => {
       if (scrollRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-        if (scrollTop + clientHeight < scrollHeight - 500) {
+        if (scrollTop + clientHeight < scrollHeight - 300) {
           // console.log('at bottom');
           if (isAtBottom === true) {
             setIsAtBottom(false);
@@ -106,10 +111,22 @@ function App() {
       }
     }
 
-    if (scrollRef.current) {
-      scrollRef.current.addEventListener('scroll', handleScroll);
+    const cur = scrollRef.current;
+
+    if (cur) {
+      cur.addEventListener('scroll', handleScroll);
     }
-    // scrollToEnd();
+
+    if (isAtBottom) {
+      scrollToEnd();
+    }
+
+    return () => {
+      if (cur) {
+        cur.removeEventListener('scroll', handleScroll);
+      }
+    };
+
   }, [oldMessages]);
 
   return (
