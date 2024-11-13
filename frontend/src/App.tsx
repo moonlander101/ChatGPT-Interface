@@ -35,7 +35,13 @@ function App() {
   const handleClear = async () => {
     console.log("clearing messages");
     await fetch('http://localhost:3000/clear', {
-      method: 'GET',
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ 
+        key : "20241113130312" //HARDCODED
+      })
     });
     console.log("cleared messages");
     setOldMessages([]);
@@ -51,7 +57,10 @@ function App() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ message })
+      body: JSON.stringify({ 
+        message,
+        key : "20241113130312" //HARDCODED
+      })
     });
 
     const reader = aiRes.body!.getReader();
@@ -100,7 +109,7 @@ function App() {
     if (scrollRef.current) {
       scrollRef.current.addEventListener('scroll', handleScroll);
     }
-    scrollToEnd();
+    // scrollToEnd();
   }, [oldMessages]);
 
   return (

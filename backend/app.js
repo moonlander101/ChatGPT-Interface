@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const {getResponse,clearOldMessages} = require('./controllers/getResponse')
+const {getResponse,clearOldMessages, getStreamedResponse} = require('./controllers/responseController')
 
 const corsMiddleWare = (req,res,next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Allow only the specified origin
@@ -21,57 +21,19 @@ const corsMiddleWare = (req,res,next) => {
 app.use(express.json())
 app.use(corsMiddleWare)
 
-
+// s
 app.get('/', (req, res) => {
   res.send('My api works bro')
 })
 
-app.get('/clear', (req, res) => {
-    clearOldMessages()
+app.post('/clear', async (req, res) => {
+    await clearOldMessages(req,res);
     console.log("Old messages cleared")
-    return res.end()
+    // return res.end()
 })
 
-
-const OpenAI = require("openai");
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
-
-oldMessages = []
-
 app.post('/chat', async (req, res) => {
-  res.set({
-    'Cache-Control': 'no-cache',
-    'Content-Type': 'text/event-stream',
-    'Connection': 'keep-alive'
-  });
-  res.flushHeaders();
-
-  let localOldMessages = [...oldMessages];  // Clone to prevent cross-request issues
-
-  const message = req.body.message;
-  localOldMessages.push({ role: "user", content: message });
-
-  let om = { role: "assistant", content: "" };
-  localOldMessages.push(om);
-
-  let stream = await openai.chat.completions.create({
-      model: "gpt-4o-2024-08-06",
-      messages: [
-          { role: "system", content: "You are a helpful assistant." },
-          ...localOldMessages,
-      ],
-      stream: true
-  });
-
-  for await (const chunk of stream) {
-      // console.log(chunk.choices[0]?.delta?.content || "No content");
-      res.write(chunk.choices[0]?.delta?.content || "");
-      om.content += chunk.choices[0]?.delta?.content || "";
-  }
-
-  return res.end();
+    await getStreamedResponse(req,res); 
 });
 
 app.listen(port, () => {
