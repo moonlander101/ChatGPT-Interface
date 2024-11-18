@@ -10,6 +10,7 @@
     background-color: #175B65;
 }
 
+/* Used to format markdown since tailwind removes styles from default components */
 .markdown * {
     padding : 5px 5px 5px 0px;
 }
@@ -68,4 +69,31 @@
 
 .markdown span{
     padding-right: 0px;
+}
+
+/* for rehype-mathjaxSVG mainly to center block equations and remove padding given from parent class markdown */
+mjx-container[jax="SVG"] {
+    padding: 0px 0px 0px 0px;
+}
+
+mjx-container[jax="SVG"] svg{
+    padding: 0px 0px 0px 0px;
+    display: inline;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+mjx-container[jax="SVG"][display="true"] svg{
+    scale: 1.3;
+}
+
+mjx-container[jax="SVG"] {
+    padding: 0px 0px 0px 0px;
+}
+
+
+/* for rehype-katex mainly because of markdown class putting everything */
+.katex * {
+    scale: 1;
+    padding: 0px 0px 0px 0px;
 }
