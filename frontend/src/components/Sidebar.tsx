@@ -1,7 +1,7 @@
 function Sidebar({ sidebarOpen, toggleSidebar }: { sidebarOpen: boolean, toggleSidebar: () => void }) {
   return (
     <>
-      <div className={`bg-[#171717] h-full ${sidebarOpen ? 'w-[20%]' : 'w-[0%]'} transition-all duration-300 ease-in-out`}>
+      <div className={`bg-[#171717] h-full transition-all duration-500 ease-out ${sidebarOpen ? 'w-[20%]' : 'w-[0%]'} max-w-[267px] shrink-0`}>
         <div className="w-full p-2 pl-4">
             <button onClick={toggleSidebar}>
                 <div className="p-1 mr-6 text-[#999999]" hidden={!sidebarOpen}>

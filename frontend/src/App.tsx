@@ -10,6 +10,7 @@ import ScrollButton from './components/ScrollButton';
 interface Message {
   role: string;
   content: string;
+  isDone : boolean;
 }
 
 function App() {
@@ -21,6 +22,14 @@ function App() {
   const [oldMessages, setOldMessages] = useState<Message[]>([]);
   const [isAtBottom, setIsAtBottom] = useState<boolean>(true);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+
+  const addDelimiters = (message: string) => {
+    return message
+    .replace(/\\\(/g, '$$')
+    .replace(/\\\)/g, '$$')
+    .replace(/\\\[/g, '$$$$')
+    .replace(/\\\]/g, '$$$$')
+  }
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -51,7 +60,7 @@ function App() {
   const handleSubmit = async (message: string) => {
     setIsSubmitting(true);
 
-    setOldMessages(prevMessages => [...prevMessages, {role: "user", content: message},{role: "assistant", content: ''}]);
+    setOldMessages(prevMessages => [...prevMessages, {role: "user", content: message, isDone: true},{role: "assistant", content: '', isDone: false}]);
 
     const aiRes = await fetch('http://localhost:3000/chat', {
       method: 'POST',
@@ -81,7 +90,7 @@ function App() {
           const updatedMessages = [...prevMessages];
           updatedMessages[updatedMessages.length - 1] = {
             ...updatedMessages[updatedMessages.length - 1],
-            content: updatedMessages[updatedMessages.length - 1].content + chunk,
+            content: addDelimiters(updatedMessages[updatedMessages.length - 1].content + chunk),
           };
           return updatedMessages;
         });
@@ -100,8 +109,8 @@ function App() {
         .replace(/\\\(/g, '$$')
         .replace(/\\\)/g, '$$')
         .replace(/\\\[/g, '$$$$')
-        .replace(/\\\]/g, '$$$$')
-      ,
+        .replace(/\\\]/g, '$$$$'),
+        isDone : true
       };
       return updatedMessages;
     });
@@ -139,7 +148,7 @@ function App() {
       scrollToEnd();
     }
 
-    // This may cause an issue later 
+    // This may cause an issue later as its adding so many event listners
     // return () => {
     //   if (cur) {
     //     cur.removeEventListener('scroll', handleScroll);
@@ -162,7 +171,7 @@ function App() {
                 {oldMessages.map((message, index) => (
                   message.role === "user"
                     ? <UserTextBubble key={index} message={message.content} />
-                    : <ResponseText key={index} message={message.content} isGenerating={isGenerating}/>
+                    : <ResponseText key={index} message={message.content} isGenerating={isGenerating && !message.isDone}/>
                 ))}
                 <div ref={lastMessageRef}/>
               </div>
