@@ -4,6 +4,7 @@ const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
+// Doesnt work need to change
 const getResponse = async (message) => {
     const completion = await openai.chat.completions.create({
         model: "gpt-4o-2024-08-06",
