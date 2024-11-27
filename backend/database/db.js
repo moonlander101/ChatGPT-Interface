@@ -13,9 +13,9 @@ const openChat = async (dateStr) => {
     let d = new Date(dateStr);
     try {
         const chat = await fs.readFile(`${CHATS_PATH}/${dateStr}.json`, 'utf-8');
-    return JSON.parse(chat);
+        return JSON.parse(chat);
     } catch (err) {
-        console.error('bruh');
+        console.error('Cannot open chat');
         return null;
     }
 }
@@ -48,13 +48,30 @@ const storeChat = async (dateStr, title, messages) => {
 }
 
 const clearChat = async (dateStr) => {
+    await fs.access(`${CHATS_PATH}/${dateStr}.json`, fs.constants.F_OK)
     await storeChat(dateStr, 'Chat', []);
+}
+
+const getAllChats = async () => {
+    const files = await fs.readdir(CHATS_PATH);
+    return files.map(file => file.split('.')[0]);
+}
+
+const checkIfChatExists = async (dateStr) => {
+    try {
+        await fs.access(`${CHATS_PATH}/${dateStr}.json`, fs.constants.F_OK);
+        return true;
+    } catch (err) {
+        return false;
+    }
 }
 
 module.exports = {
     getOldMessages,
     getTitle,
     storeChat,
-    clearChat
+    clearChat,
+    getAllChats,
+    checkIfChatExists
 }
 

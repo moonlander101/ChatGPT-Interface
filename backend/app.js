@@ -2,7 +2,8 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const {getResponse,clearOldMessages, getStreamedResponse} = require('./controllers/responseController')
+const {getResponse,clearOldMessages, getStreamedResponse, getAllChatIDS} = require('./controllers/responseController')
+const { clearChat, getOldMessages } = require('./database/db')
 
 const corsMiddleWare = (req,res,next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Allow only the specified origin
@@ -26,14 +27,23 @@ app.get('/', (req, res) => {
   res.send('My api works bro')
 })
 
+app.get('/chat/:dateStr', async (req, res) => {
+  const chats = await getOldMessages(req.params.dateStr)
+  return res.json(chats)
+})
+
+app.get('/sidebar', async (req, res) => {
+  return res.json(await getAllChatIDS())
+})
+
 app.post('/clear', async (req, res) => {
     await clearOldMessages(req,res);
     console.log("Old messages cleared")
     // return res.end()
 })
 
-app.post('/chat', async (req, res) => {
-    await getStreamedResponse(req,res); 
+app.post('/response', async (req, res) => {
+    await getStreamedResponse(req,res);
 });
 
 app.listen(port, () => {
