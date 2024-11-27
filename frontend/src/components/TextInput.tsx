@@ -1,5 +1,6 @@
 // TextInput.tsx
 import { useRef, useState } from 'react';
+// import Tooltip from './Tooltip';
 import Tooltip from './Tooltip';
 
 interface TextInputProps {
@@ -96,15 +97,17 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
             rows={1}
             onKeyDown={onEnterPress}
           />
-          <button type="submit" disabled={textareaValue === "" || isSubmitting}>
-            <div className={`p-1 mr-1 ml-2 rounded-lg relative ${textareaValue !== "" && !isSubmitting? "hover:bg-[#00000033]" : ""} transition-colors`} onMouseLeave={handleMouseOut} onMouseEnter={handleMouseIn}>
-              <Tooltip visible={showTooltip && (textareaValue === "" || isSubmitting)} message={textareaValue === "" ? "Message is Empty" : "Submitting"}/>
-              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={`${textareaValue === "" || isSubmitting ? "grey" : "white"}`} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send-horizontal">
-                <path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/>
-                <path d="M6 12h16"/>
-              </svg>
-            </div>
-          </button>
+          <Tooltip position='top' message={textareaValue === "" ? "Message is Empty" : "Submitting"}>
+            <button type="submit" disabled={textareaValue === "" || isSubmitting}>
+              <div className={`p-1 mr-1 ml-2 rounded-lg relative ${textareaValue !== "" && !isSubmitting? "hover:bg-[#00000033]" : ""} transition-colors`} onMouseLeave={handleMouseOut} onMouseEnter={handleMouseIn}>
+                {/* <Tooltip visible={showTooltip && (textareaValue === "" || isSubmitting)} message={textareaValue === "" ? "Message is Empty" : "Submitting"}/> */}
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={`${textareaValue === "" || isSubmitting ? "grey" : "white"}`} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send-horizontal">
+                  <path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/>
+                  <path d="M6 12h16"/>
+                </svg>
+              </div>
+            </button>
+          </Tooltip>
         </div>
       </div>
     </form>

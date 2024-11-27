@@ -24,10 +24,25 @@ function TestApp() {
 
     return (
         <>
+            <div className="w-10 h-10">
+                2
+            </div>
+            <Tooltip position="top" message="hello">
+            <div className="m-0">
             <div className="w-40 h-40 bg-black p-2 relative" onMouseEnter={handleMouseIn} onMouseLeave={handleMouseOut}>
                 <p className="text-white">Hover over me to see tooltip</p>
-                <Tooltip visible={showTooltip} message="2"/>
             </div>
+            </div>
+            </Tooltip>
+
+            <div className="m-10">
+            <Tooltip position="bottom-left" message="Message Recieved">
+            <div className="w-[100px] h-[100px] border border-green-400">
+                2
+            </div>
+            </Tooltip>
+            </div>
+
             <div className="w-6 h-6 border border-red-500 rounded full">
                 2
             </div>
