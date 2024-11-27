@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './App.css'
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
-import Conversation from './components/Conversation';
+import { Outlet } from 'react-router';
 
 export interface Message {
   role: string;
@@ -10,7 +10,32 @@ export interface Message {
   isDone : boolean;
 }
 
+export interface SidebarButtonProps {
+  id : string,
+  title : string,
+}
+
 function App() {
+  const [chats, setChats] = useState<SidebarButtonProps[]>([]);
+  
+  const updateSidebar = () => {
+    fetch('http://localhost:3000/sidebar')
+    .then(res => res.json() as Promise<SidebarButtonProps[]>)
+    .then(data => 
+      {
+        setChats(data)
+        console.log(chats)
+      }
+    )
+  }
+  
+  useEffect(()=>{
+    updateSidebar();
+    console.log("Upodated sidebar")
+  },[])
+
+
+
   // const lastMessageRef = useRef<HTMLDivElement>(null);
   // const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -19,9 +44,8 @@ function App() {
   // const [oldMessages, setOldMessages] = useState<Message[]>([]);
   // const [isAtBottom, setIsAtBottom] = useState<boolean>(true);
 
-  const [chats, setChats] = useState<string[]>([]);
-  const [curChat, setCurChat] = useState<string>('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  // const [curChat, setCurChat] = useState<string>('');
+  // const [messages, setMessages] = useState<Message[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
 
   // const addDelimiters = (message: string) => {
@@ -32,9 +56,9 @@ function App() {
   //   .replace(/\\\]/g, '$$$$')
   // }
 
-  const handleSelect = (chat: string) => {
-    setCurChat(chat);
-  }
+  // const handleSelect = (chat: string) => {
+  //   setCurChat(chat);
+  // }
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -164,20 +188,23 @@ function App() {
   //   }
   // }, [oldMessages]);
 
-  useEffect(() => {
-    if (curChat === '') {
-      setMessages([]);
-    } else {
-      // fetch messages
+  // useEffect(() => {
+  //   if (curChat === '') {
+  //     setMessages([]);
+  //   } else {
+  //     // fetch messages
 
-      // setMessages(messages);
-    }
-  }, [chats, curChat]);
+  //     // setMessages(messages);
+  //   }
+  // }, [chats, curChat]);
 
   return (
     <>
         <div className='w-[100%] h-screen flex justify-evenly'>
-          <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar}/>
+          {/* <div className='absolute w-screen h-[100%] bg-opacity-70 bg-black z-[99]'>
+
+          </div> */}
+          <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} chats={chats}/>
           <div className={`relative w-[100%]`}>
             <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} handleClear={()=>{}}/>
             {/* <div className="bg-[#212121] flex h-screen flex-col justify-between">
@@ -195,7 +222,7 @@ function App() {
                 <TextInput onSubmit={handleSubmit} isSubmitting={isSubmitting}/>
               </div>
             </div> */}
-            <Conversation />
+            <Outlet context={updateSidebar}/>
           </div>
           </div>
     </>
