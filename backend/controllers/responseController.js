@@ -1,9 +1,10 @@
 const OpenAI = require("openai");
-const { getOldMessages, storeChat, clearChat } = require('../database/db');
+const { getOldMessages, storeChat, clearChat, getAllChats, checkIfChatExists, getTitle } = require('../database/db');
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
 
+// Doesnt work need to change
 const getResponse = async (message) => {
     const completion = await openai.chat.completions.create({
         model: "gpt-4o-2024-08-06",
@@ -21,7 +22,14 @@ const getResponse = async (message) => {
 }
 
 const getStreamedResponse = async (req,res) => {
-    const dateStr = req.body.key;
+    let dateStr = req.body.key;
+    let title = await getTitle(dateStr);
+    const doesExist = await checkIfChatExists(dateStr);
+
+    if (!doesExist) {
+        dateStr = formatDate(new Date());
+    }
+
     const oldMessages = await getOldMessages(dateStr);
 
     res.set({
@@ -45,20 +53,47 @@ const getStreamedResponse = async (req,res) => {
         stream: true
     });
     
+    res.write(JSON.stringify({
+        id : dateStr
+    }));
+
     for await (const chunk of stream) {
         // console.log(chunk.choices[0]?.delta?.content || "No content");
+        // res.write(`${chunk.choices[0]?.delta?.content || ""}`);
         res.write(chunk.choices[0]?.delta?.content || "");
         om.content += chunk.choices[0]?.delta?.content || "";
     }
     oldMessages.push(om);
     console.log(oldMessages);
 
+    if (!doesExist) {
+        try {
+            title = await generateTitle(oldMessages);
+        } catch(err) {
+            console.log(err)
+        }
+    }
+
     try {
-        await storeChat(dateStr, "Chat", oldMessages);
+        await storeChat(dateStr, title, oldMessages);
     } catch(err) {
-        console.log("bruh2")
+        console.log(err)
     }
     return res.end();
+}
+
+const generateTitle = async (oldMessages) => {
+
+    const completion = await openai.chat.completions.create({
+        model: "gpt-4o-2024-08-06",
+        messages: [
+            { role: "system", content: "You are a helpful assistant." },
+            ...oldMessages,
+            { role: "user", content: "Give me a small title to summarize what this chat is about. A title to remember this chat by. No need quotation marks between the title" },
+        ],
+    });
+
+    return completion.choices[0].message.content;
 }
 
 const clearOldMessages = async (req,res) => {
@@ -67,8 +102,34 @@ const clearOldMessages = async (req,res) => {
     return res.end();
 }
 
+const getAllChatIDS = async () => {
+    const metadataArray = []
+    const files = await getAllChats();
+    for (let i = 0; i < files.length; i++) {
+        let metadata = {}
+        metadata.id = files[i];
+        metadata.title = await getTitle(files[i]);
+        metadataArray.push(metadata);
+    }
+    return metadataArray
+}
+
+
 module.exports = {
     getResponse,
     clearOldMessages,
-    getStreamedResponse
+    getStreamedResponse,
+    getAllChatIDS
 };
+
+
+function formatDate(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const seconds = String(date.getSeconds()).padStart(2, '0');
+
+    return `${year}${month}${day}${hours}${minutes}${seconds}`;
+}
