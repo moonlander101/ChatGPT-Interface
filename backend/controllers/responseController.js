@@ -1,5 +1,14 @@
 const OpenAI = require("openai");
-const { getOldMessages, storeChat, clearChat, getAllChats, checkIfChatExists, getTitle } = require('../database/db');
+const { 
+    getOldMessages, 
+    storeChat, 
+    clearChat, 
+    getAllChats, 
+    checkIfChatExists, 
+    getTitle, 
+    updateChat 
+} = require('../database/db'); // ADD FUCNTION TO CHANGE THIS BASED ON USER SELECTION
+
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
 });
@@ -31,6 +40,7 @@ const getStreamedResponse = async (req,res) => {
     }
 
     const oldMessages = await getOldMessages(dateStr);
+    console.log(oldMessages)
 
     res.set({
         'Cache-Control': 'no-cache',
@@ -66,16 +76,13 @@ const getStreamedResponse = async (req,res) => {
     oldMessages.push(om);
     console.log(oldMessages);
 
-    if (!doesExist) {
-        try {
-            title = await generateTitle(oldMessages);
-        } catch(err) {
-            console.log(err)
-        }
-    }
-
     try {
-        await storeChat(dateStr, title, oldMessages);
+        if (!doesExist) {
+            title = await generateTitle(oldMessages);
+            await storeChat(dateStr, title, oldMessages);
+        } else {
+            await updateChat(dateStr, title, oldMessages);
+        }
     } catch(err) {
         console.log(err)
     }
@@ -119,7 +126,9 @@ module.exports = {
     getResponse,
     clearOldMessages,
     getStreamedResponse,
-    getAllChatIDS
+    getAllChatIDS,
+    getOldMessages,
+    clearChat
 };
 
 

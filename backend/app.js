@@ -2,11 +2,10 @@ const express = require('express')
 const app = express()
 const port = 3000
 
-const {getResponse,clearOldMessages, getStreamedResponse, getAllChatIDS} = require('./controllers/responseController')
-const { clearChat, getOldMessages } = require('./database/db')
+const {getResponse,clearOldMessages, getStreamedResponse, getAllChatIDS, getOldMessages, clearChat} = require('./controllers/responseController')
 
 const corsMiddleWare = (req,res,next) => {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Allow only the specified origin
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Allow only the specified origin
   res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE'); // Specify allowed HTTP methods
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With'); // Allowed headers in requests
   res.header('Access-Control-Expose-Headers', 'Content-Length, Content-Disposition'); // Headers exposed to the client

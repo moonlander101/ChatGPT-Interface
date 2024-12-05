@@ -47,6 +47,11 @@ const storeChat = async (dateStr, title, messages) => {
     await fs.writeFile(`${CHATS_PATH}/${dateStr}.json`, JSON.stringify(chat));
 }
 
+// For compatibility
+const updateChat = async (dateStr, title, messages) => {
+    return storeChat(dateStr, title, messages)
+}
+
 const clearChat = async (dateStr) => {
     await fs.access(`${CHATS_PATH}/${dateStr}.json`, fs.constants.F_OK)
     await storeChat(dateStr, 'Chat', []);
@@ -72,6 +77,7 @@ module.exports = {
     storeChat,
     clearChat,
     getAllChats,
-    checkIfChatExists
+    checkIfChatExists,
+    updateChat
 }
 
