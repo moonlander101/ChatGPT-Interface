@@ -8,16 +8,17 @@ Apart from the `OPENAI_API_KEY` environment variables, if you are [using MongoDB
 you will need a `CONNECTION_URL` environment variable 
 ```bash
 OPENAI_API_KEY=<your key>
-CONNECTION_URL=<mongodb>
+CONNECTION_URL=<your connection url>
 ```
 
 ## Where the chats are saved
 
 By default your past chats are saved in `@/backend/database/chats/*`, if you dont like this you can change it use MongoDB.
 
-To do this change the following code,
+To do this change the following code in `@/backend/controllers/responseController.js` from,
 
 ```js
+// At the top of the file
 const OpenAI = require("openai");
 const { 
     getOldMessages, 
