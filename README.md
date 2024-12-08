@@ -1,8 +1,12 @@
 ﻿# ChatGPT-Interface
 
-Needs an OenAI API key to work, set it as the `OPENAI_API_KEY` environment variable in `./backend/.env` (you have to make the file) and run the `run.ps1` script.
+Needs an OenAI API key to work, set it as the `OPENAI_API_KEY` environment variable in `./backend/.env` (you have to make the file). 
 
-## Setting up env variables
+Go to each of the directories `@/backend` and `@/frontend`. in each directory run `npm run i` to install nessesary libraries.
+
+Finally, run the `run.ps1` script.
+
+## Setting up
 
 Apart from the `OPENAI_API_KEY` environment variables, if you are [using MongoDB](#where-the-chats-are-saved) to save your chats
 you will need a `CONNECTION_URL` environment variable 
