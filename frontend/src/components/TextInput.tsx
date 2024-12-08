@@ -11,25 +11,25 @@ interface TextInputProps {
 const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaValue, setTextareaValue] = useState<string>('');
-  const [showTooltip, setShowTooltip] = useState<boolean>(false);
-  const timeoutRef = useRef<number | null>(null); // Ref to store the timeout ID
+  // const [showTooltip, setShowTooltip] = useState<boolean>(false);
+  // const timeoutRef = useRef<number | null>(null); // Ref to store the timeout ID
 
-  const handleMouseIn = () => {
-      // Set a timeout for 1 second to show the tooltip
-      timeoutRef.current = window.setTimeout(() => {
-          setShowTooltip(true);
-      }, 500);
-  };
+  // const handleMouseIn = () => {
+  //     // Set a timeout for 1 second to show the tooltip
+  //     timeoutRef.current = window.setTimeout(() => {
+  //         setShowTooltip(true);
+  //     }, 500);
+  // };
 
-  const handleMouseOut = () => {
-      // Clear the timeout if mouse leaves before 1 second
-      if (timeoutRef.current) {
-          clearTimeout(timeoutRef.current);
-          timeoutRef.current = null;
-      }
-      // Hide the tooltip immediately
-      setShowTooltip(false);
-  };
+  // const handleMouseOut = () => {
+  //     // Clear the timeout if mouse leaves before 1 second
+  //     if (timeoutRef.current) {
+  //         clearTimeout(timeoutRef.current);
+  //         timeoutRef.current = null;
+  //     }
+  //     // Hide the tooltip immediately
+  //     setShowTooltip(false);
+  // };
 
 
   const handleInput = () => {
@@ -83,11 +83,11 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
     <form className="w-full" onSubmit={handleSubmit}>
       <div className="flex justify-center">
         <div className='bg-[#2F2F2F] p-3 w-4/5 rounded-3xl max-w-[720px] flex items-end'>
-        <div className="p-1 ml-1 mr-2 rounded-lg hover:bg-[#00000033] transition-colors">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-paperclip">
-                    <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
-                  </svg>
-                </div>
+          <div className="p-1 ml-1 mr-2 rounded-lg hover:bg-[#00000033] transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-paperclip">
+              <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+            </svg>
+          </div>
           <textarea
             ref={textareaRef}
             onInput={handleInput}
@@ -97,9 +97,9 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
             rows={1}
             onKeyDown={onEnterPress}
           />
-          <Tooltip position='top' message={textareaValue === "" ? "Message is Empty" : "Submitting"}>
+          <Tooltip position='top' message={textareaValue === "" ? "Message is Empty" : (isSubmitting ? "Submitting": "Send Message")}>
             <button type="submit" disabled={textareaValue === "" || isSubmitting}>
-              <div className={`p-1 mr-1 ml-2 rounded-lg relative ${textareaValue !== "" && !isSubmitting? "hover:bg-[#00000033]" : ""} transition-colors`} onMouseLeave={handleMouseOut} onMouseEnter={handleMouseIn}>
+              <div className={`p-1 mr-1 ml-2 rounded-lg relative ${textareaValue !== "" && !isSubmitting? "hover:bg-[#00000033]" : ""} transition-colors`}>
                 {/* <Tooltip visible={showTooltip && (textareaValue === "" || isSubmitting)} message={textareaValue === "" ? "Message is Empty" : "Submitting"}/> */}
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={`${textareaValue === "" || isSubmitting ? "grey" : "white"}`} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-send-horizontal">
                   <path d="M3.714 3.048a.498.498 0 0 0-.683.627l2.843 7.627a2 2 0 0 1 0 1.396l-2.842 7.627a.498.498 0 0 0 .682.627l18-8.5a.5.5 0 0 0 0-.904z"/>

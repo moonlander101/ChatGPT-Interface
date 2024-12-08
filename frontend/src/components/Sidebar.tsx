@@ -59,11 +59,11 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
   // console.log(catagories);
   return (
     <>
-      <div className={`flex flex-1 bg-[#171717] h-full transition-all duration-500 ease-out ${sidebarOpen ? 'w-[30%]' : 'w-[0%]'} max-w-[267px] shrink-0 text-[#ececec]`}>
+      <div className={`flex flex-1 bg-[#171717] h-full transition-all duration-500 ease-in-out ${sidebarOpen ? 'w-[20%]' : 'w-[0%]'} max-w-[267px] shrink-0 text-[#ececec]`}>
         <div className="w-[100%] max-w-[267px] flex flex-col">
           <div className="w-full p-2 pl-4 pr-4 flex">
                 <button onClick={toggleSidebar} disabled={!sidebarOpen}>
-                    <div className="p-1">
+                    <div className="p-2 hover:backdrop-brightness-150 rounded-md">
                         <Tooltip position="right" message="Close Sidebar">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-panels-top-left"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
                         </Tooltip>
@@ -74,7 +74,7 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
                     <button disabled={!sidebarOpen} onClick={()=>{
                         navigator('/new');
                     }}>
-                        <div className="p-1">
+                        <div className="p-2 hover:backdrop-brightness-150 rounded-md">
                           {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-panels-top-left"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> */}
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
                         </div>

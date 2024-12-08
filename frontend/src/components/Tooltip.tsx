@@ -52,7 +52,7 @@ function Tooltip({children, position = "right", message="Add message"} : {childr
     <>
         <div className="relative flex w-fit" onMouseLeave={handleMouseOut} onMouseEnter={handleMouseIn}>
             <div className={`absolute ${outSideBoxClass} top-0`}>
-                <div className={`absolute z-20 ${posClass} bg-black p-2 rounded text-sm w-fit h-fit text-white text-nowrap`} hidden={!showTooltip}>
+                <div className={`absolute z-20 ${posClass} bg-black p-2 rounded text-sm w-fit h-fit text-white text-nowrap font-semibold`} hidden={!showTooltip}>
                     {message}
                 </div>
             </div>
