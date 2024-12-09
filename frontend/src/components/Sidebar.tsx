@@ -88,7 +88,7 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
                   <div className="w-8 h-8 rounded-full animate-spin absolute
                                   border-4 border-solid border-[#ececec] border-t-transparent top-0"></div>
               </div> */}
-          <div className="h-[85%] overflow-scroll">
+          <div className="h-[85%] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800 hover:scrollbar-thumb-zinc-500">
           {
             Object.keys(catagories).reverse().map((key) => {
               return(
