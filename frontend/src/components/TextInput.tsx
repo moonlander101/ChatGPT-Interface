@@ -98,7 +98,7 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
             ref={textareaRef}
             onInput={handleInput}
             value={textareaValue}
-            className="row-span-2 resize-none h-full w-full border-none outline-none bg-inherit text-white caret-white max-h-[200px] overflow-y-auto"
+            className="row-span-2 pb-[5px] resize-none h-full w-full border-none outline-none bg-inherit text-white caret-white max-h-[200px] overflow-y-auto"
             placeholder="Message Something"
             rows={1}
             onKeyDown={onEnterPress}
