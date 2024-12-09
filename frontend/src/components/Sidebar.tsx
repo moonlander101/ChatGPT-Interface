@@ -59,7 +59,7 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
   // console.log(catagories);
   return (
     <>
-      <div className={`flex flex-1 bg-[#171717] h-full transition-all duration-500 ease-in-out ${sidebarOpen ? 'w-[20%]' : 'w-[0%]'} max-w-[267px] shrink-0 text-[#ececec]`}>
+      <div className={`flex flex-1 bg-[#171717] h-full transition-all duration-500 ease-in-out ${sidebarOpen ? 'w-[20%] min-w-[20%]' : 'min-w-[0%] w-[0%]'} max-w-[267px] shrink-0 text-[#ececec]`}>
         <div className="w-[100%] max-w-[267px] flex flex-col">
           <div className="w-full p-2 pl-4 pr-4 flex">
                 <button onClick={toggleSidebar} disabled={!sidebarOpen}>
