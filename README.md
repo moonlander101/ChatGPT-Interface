@@ -6,7 +6,7 @@ Go to each of the directories `@/backend` and `@/frontend`. in each directory ru
 
 Finally, run the `run.ps1` script.
 
-## Setting up
+## Environment Variables
 
 Apart from the `OPENAI_API_KEY` environment variables, if you are [using MongoDB](#where-the-chats-are-saved) to save your chats
 you will need a `CONNECTION_URL` environment variable 

@@ -1,4 +1,18 @@
 const OpenAI = require("openai");
+const CHAT_SAVE_MODES = {
+    "FileSystem": 1,
+    "MongoDB": 2
+}
+
+let Api;
+if (process.env.CHAT_SAVE_MODE === CHAT_SAVE_MODES.MongoDB.toString()) {
+    console.log("Using MongoDB");
+    Api = require('../database/mongo_db');
+} else {
+    console.log("Using File System");
+    Api = require('../database/db');
+}
+
 const { 
     getOldMessages, 
     storeChat, 
@@ -7,7 +21,7 @@ const {
     checkIfChatExists, 
     getTitle, 
     updateChat 
-} = require('../database/db'); // ADD FUCNTION TO CHANGE THIS BASED ON USER SELECTION
+} = Api
 
 const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY
@@ -55,6 +69,7 @@ const getStreamedResponse = async (req,res) => {
     let om = { role: "assistant", content: "" };  
 
     let stream = await openai.chat.completions.create({
+        // model: "meta-llama/Llama-3.2-3B-Instruct",
         model: "gpt-4o-2024-08-06",
         messages: [
             { role: "system", content: "You are a helpful assistant." },
@@ -92,6 +107,7 @@ const getStreamedResponse = async (req,res) => {
 const generateTitle = async (oldMessages) => {
 
     const completion = await openai.chat.completions.create({
+        // model: "meta-llama/Llama-3.2-3B-Instruct",
         model: "gpt-4o-2024-08-06",
         messages: [
             { role: "system", content: "You are a helpful assistant." },
