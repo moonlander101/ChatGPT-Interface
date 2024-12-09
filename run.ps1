@@ -78,7 +78,7 @@ function Set-SavePathForChats($envFile) {
 # MAIN
 # Clear-Host
 
-Write-Host "  _      _      __  __   _____       _             __               " -ForegroundColor  -BackgroundColor Black
+Write-Host "  _      _      __  __   _____       _             __               " -ForegroundColor White
 Write-Host " | |    | |    |  \/  | |_   _|     | |           / _|              " -ForegroundColor White
 Write-Host " | |    | |    | \  / |   | |  _ __ | |_ ___ _ __| |_ __ _  ___ ___ " -ForegroundColor Gray
 Write-Host " | |    | |    | |\/| |   | | | '_ \| __/ _ \ '__|  _/ _` |/ __/ _ \" -ForegroundColor Gray
