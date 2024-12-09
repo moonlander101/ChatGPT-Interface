@@ -1,7 +1,7 @@
 // import { useRef, useState } from "react"
 
 import { useEffect, useRef, useState } from "react";
-import { Message } from "../App";
+import { Message, SidebarButtonProps } from "../App";
 import UserTextBubble from "./userText";
 import ResponseText from "./responseText";
 import ScrollButton from "./ScrollButton";
@@ -20,7 +20,7 @@ function Conversation() {
   const { chatID } = useParams();
   // const [statefullChatID, setStatefullChatID] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
-  const updateSidebar = useOutletContext<()=>void>();
+  const updateSidebar = useOutletContext<() => Promise<SidebarButtonProps | "">>();
 
   const addDelimiters = (message: string) => {
     return message
@@ -58,7 +58,7 @@ function Conversation() {
     setIsGenerating(true);
 
     // Used to change url from "new" to generated id from server
-    let newChatID = "";
+    // let newChatID = "";
     let changed = false;
     
     while (true) {
@@ -75,22 +75,22 @@ function Conversation() {
 
         const chunk = decoder.decode(value, { stream: true })
         // console.log(chunk)
-        try {
-          const meta = JSON.parse(chunk);
-          console.log("Meta is " + meta.id);
-          newChatID = meta.id;
-          continue
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        } catch (e) {
-          setOldMessages(prevMessages => {
-            const updatedMessages = [...prevMessages];
-            updatedMessages[updatedMessages.length - 1] = {
-              ...updatedMessages[updatedMessages.length - 1],
-              content: addDelimiters(updatedMessages[updatedMessages.length - 1].content + chunk),
-            };
-            return updatedMessages;
-          }); 
-        }
+        // try {
+        //   const meta = JSON.parse(chunk);
+        //   console.log("Meta is " + meta.id);
+        //   newChatID = meta.id;
+        //   continue
+        // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        // } catch (e) {
+        setOldMessages(prevMessages => {
+          const updatedMessages = [...prevMessages];
+          updatedMessages[updatedMessages.length - 1] = {
+            ...updatedMessages[updatedMessages.length - 1],
+            content: addDelimiters(updatedMessages[updatedMessages.length - 1].content + chunk),
+          };
+          return updatedMessages;
+        }); 
+        // }
         // if (isAtBottom) {
         //   scrollToEnd();
         // }
@@ -108,9 +108,11 @@ function Conversation() {
 
     setIsSubmitting(false);
     if (changed) {
-      updateSidebar();
-      console.log("Trying to switch to " + newChatID);
-      navigate(`/${newChatID}`, { replace: false });
+      updateSidebar().then((chat : SidebarButtonProps | "") => {
+        if (chat !== "") {
+          navigate(`/${chat.id}`, { replace: false });
+        }
+      })
     }
     // scrollToEnd();
   }

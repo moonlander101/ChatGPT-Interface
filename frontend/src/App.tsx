@@ -18,15 +18,17 @@ export interface SidebarButtonProps {
 function App() {
   const [chats, setChats] = useState<SidebarButtonProps[]>([]);
   
-  const updateSidebar = () => {
-    fetch('http://localhost:3000/sidebar')
-    .then(res => res.json() as Promise<SidebarButtonProps[]>)
-    .then(data => 
-      {
-        setChats(data)
-        console.log(chats)
-      }
-    )
+  const updateSidebar = async () => {
+    try {
+      const res = await fetch('http://localhost:3000/sidebar');
+      const data = await res.json() as SidebarButtonProps[];
+      setChats(data);
+      console.log("Latest chat is,", data[data.length - 1]);
+      return data[data.length - 1]
+    } catch (error) {
+      console.error('Error updating sidebar:', error);
+      return ""
+    }
   }
   
   useEffect(()=>{
