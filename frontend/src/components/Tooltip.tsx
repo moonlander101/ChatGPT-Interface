@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 
-function Tooltip({children, position = "right", message="Add message"} : {children: React.ReactNode, position? : "top" | "bottom" | "left" | "right" | "bottom-left", message : string}) {
+function Tooltip({children, position = "right", message="Add message"} : {children: React.ReactNode, position? : "top" | "bottom" | "left" | "right" | "bottom-left" | "top-left", message : string}) {
     const [showTooltip, setShowTooltip] = useState<boolean>(false);
     const timeoutRef = useRef<number | null>(null); // Ref to store the timeout ID
 
@@ -28,6 +28,10 @@ function Tooltip({children, position = "right", message="Add message"} : {childr
             posClass = "left-0 bottom-0 translate-y-[120%]";
             outSideBoxClass = "w-[50%] mr-[50%] mt-[50%] h-[50%]";
             break
+        case "top-left":
+            posClass = "top-0 right-0 -translate-y-[120%]";
+            outSideBoxClass = "w-[50%] mr-[50%] mb-[50%] h-[50%]";
+            break;
         default:
             posClass = "right-0 bottom-0 translate-x-[120%] translate-y-[50%]";
             outSideBoxClass = "w-[50%] ml-[50%] h-[50%]"
