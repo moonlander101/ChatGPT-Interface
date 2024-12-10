@@ -14,20 +14,27 @@ function DeleteModal({id, title, hidden, handleClose} : DeleteModalProps) {
     }
 
     const handleDelete = () => {
-        console.log("deleting ", id)
+        console.log("deleting ", id);
     }
 
-    useEffect(()=>{
-        document.addEventListener("keydown", handleEscape);
-        window.addEventListener("click", ()=>{
-            if (divRef.current && !divRef.current.contains(event?.target as Node)) {
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (divRef.current && !divRef.current.contains(event.target as Node)) {
+                console.log("eyyyyyyyyyyyyyyyyyyyyyyyyy something wrong")
                 handleClose();
             }
-        });
+        };
+        
+        if (!hidden) {
+            document.addEventListener("keydown", handleEscape);
+            window.addEventListener("click", handleClickOutside);
+        }
+
         return () => {
             document.removeEventListener("keydown", handleEscape);
-        }
-    },[])
+            window.removeEventListener("click", handleClickOutside);
+        };
+    }, [hidden]);
 
     return ( 
         <>
