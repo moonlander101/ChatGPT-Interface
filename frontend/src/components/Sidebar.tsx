@@ -157,6 +157,7 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
                               <OptionsMenu
                                 showOptions={!!showOptions[chat.id]}
                                 reference={(el) => (menuRefs.current[chat.id] = el)}
+                                chat={chat}
                               />
                             </div>
                           </div>

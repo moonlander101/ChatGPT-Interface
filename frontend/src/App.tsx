@@ -3,6 +3,8 @@ import './App.css'
 import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import { Outlet } from 'react-router';
+import DeleteModal from './components/DeleteModal';
+import { DeleteModalContext } from './lib/Contexts';
 
 export interface Message {
   role: string;
@@ -17,7 +19,8 @@ export interface SidebarButtonProps {
 
 function App() {
   const [chats, setChats] = useState<SidebarButtonProps[]>([]);
-  
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+
   const updateSidebar = async () => {
     try {
       const res = await fetch('http://localhost:3000/sidebar');
@@ -30,13 +33,29 @@ function App() {
       return ""
     }
   }
-  
+
   useEffect(()=>{
     updateSidebar();
     console.log("Upodated sidebar")
   },[])
 
+  const [currentSelectionToDelete, setCurrentSelectionToDelete] = useState<SidebarButtonProps>({id : "", title : ""});
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(true);
 
+  const openDeleteModal = ({id, title } : {id:string, title : string}) => {
+    console.log("The context worked?")
+    if (id !== "" && title !== "") {
+      setCurrentSelectionToDelete({id, title});
+      setIsDeleteModalOpen(true);
+    } else {
+      console.log("Cannot open delete dialogue without id and title")
+    }
+  }
+
+  const closeDeleteModal = () => {
+    setCurrentSelectionToDelete({id : "", title : ""})
+    setIsDeleteModalOpen(false);
+  }
 
   // const lastMessageRef = useRef<HTMLDivElement>(null);
   // const scrollRef = useRef<HTMLDivElement>(null);
@@ -48,7 +67,7 @@ function App() {
 
   // const [curChat, setCurChat] = useState<string>('');
   // const [messages, setMessages] = useState<Message[]>([]);
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+
 
   // const addDelimiters = (message: string) => {
   //   return message
@@ -202,31 +221,21 @@ function App() {
 
   return (
     <>
-        <div className='w-[100%] h-screen flex justify-evenly'>
-          {/* <div className='absolute w-screen h-[100%] bg-opacity-70 bg-black z-[99]'>
-
-          </div> */}
-          <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} chats={chats}/>
+        <div className='relative w-[100%] h-screen flex justify-evenly'>
+          <DeleteModal id={currentSelectionToDelete.id} title={currentSelectionToDelete.title} hidden={!isDeleteModalOpen} handleClose={closeDeleteModal}></DeleteModal>
+          <div className={`flex max-w-[267px] transition-all duration-500 ease-in-out ${sidebarOpen ? 'w-[20%]' : 'w-[0%]'}`}>
+            <DeleteModalContext.Provider value={{
+              isDeleteModalOpen,
+              openDeleteModal
+            }}>
+              <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} chats={chats}/>
+            </DeleteModalContext.Provider>
+          </div>
           <div className={`relative w-[100%]`}>
             <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} handleClear={()=>{}}/>
-            {/* <div className="bg-[#212121] flex h-screen flex-col justify-between">
-              <div className="flex-1 w-auto overflow-y-auto" ref={scrollRef}>
-                <div className='w-full h-10 bg-inherit'></div>
-                {oldMessages.map((message, index) => (
-                  message.role === "user"
-                    ? <UserTextBubble key={index} message={message.content} />
-                    : <ResponseText key={index} message={message.content} isGenerating={isGenerating && !message.isDone}/>
-                ))}
-                <div ref={lastMessageRef}/>
-              </div>
-              <div className="w-full pb-7 pt-4 relative">
-                <ScrollButton isAtBottom={isAtBottom} onClick={scrollToEnd}/>
-                <TextInput onSubmit={handleSubmit} isSubmitting={isSubmitting}/>
-              </div>
-            </div> */}
             <Outlet context={updateSidebar}/>
           </div>
-          </div>
+        </div>
     </>
   );
 }
