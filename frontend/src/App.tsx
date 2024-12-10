@@ -40,7 +40,7 @@ function App() {
   },[])
 
   const [currentSelectionToDelete, setCurrentSelectionToDelete] = useState<SidebarButtonProps>({id : "", title : ""});
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(true);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
 
   const openDeleteModal = ({id, title } : {id:string, title : string}) => {
     console.log("The context worked?")
