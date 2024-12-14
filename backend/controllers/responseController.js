@@ -20,7 +20,8 @@ const {
     getAllChats, 
     checkIfChatExists, 
     getTitle, 
-    updateChat 
+    updateChat,
+    deleteChat
 } = Api
 
 const openai = new OpenAI({
@@ -137,6 +138,19 @@ const getAllChatIDS = async () => {
     return metadataArray
 }
 
+const handleDeleteChat = async (req,res) => {
+    const dateStr = req.body.key;
+    try {
+        await deleteChat(dateStr);
+        return res.status(200).end()
+    } catch(e) {
+        console.error(e)
+        return res.status(500).json({
+            message: "Something went wrong"
+        })
+    }
+}
+
 
 module.exports = {
     getResponse,
@@ -144,6 +158,7 @@ module.exports = {
     getStreamedResponse,
     getAllChatIDS,
     getOldMessages,
+    handleDeleteChat,
     clearChat
 };
 

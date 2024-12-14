@@ -57,6 +57,10 @@ const clearChat = async (dateStr) => {
     await storeChat(dateStr, 'Chat', []);
 }
 
+const deleteChat = async (dateStr) => {
+    await fs.unlink(`${CHATS_PATH}/${dateStr}.json`);
+}
+
 const getAllChats = async () => {
     const files = await fs.readdir(CHATS_PATH);
     return files.map(file => file.split('.')[0]);
@@ -78,6 +82,7 @@ module.exports = {
     clearChat,
     getAllChats,
     checkIfChatExists,
-    updateChat
+    updateChat,
+    deleteChat
 }
 

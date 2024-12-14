@@ -115,6 +115,11 @@ const getAllChats = async () => {
     return res
 }
 
+const deleteChat = async (dateStr) => {
+    const db = CLIENT.db("chatgptInterface")
+    await db.collection("chats").findOneAndDelete({_id : dateStr})
+}
+
 const checkIfChatExists = async (dateStr) => {
     try {
         const chat = await CLIENT.db("chatgptInterface").collection("chats").findOne({_id : dateStr});
@@ -144,6 +149,7 @@ module.exports = {
     clearChat,
     getAllChats,
     checkIfChatExists,
-    updateChat
+    updateChat,
+    deleteChat
 }
 
