@@ -79,7 +79,8 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
 
   useEffect(() => {
     const handleOutsideClick = (event: MouseEvent) => {
-      const isOutside = Object.keys(menuRefs.current).every((id) => {
+      console.log("[HandleOutsideClick Sidebar] Clicked somewhere bro")
+      const isOutside = Object.keys(menuRefs.current).some((id) => {
         const menu = menuRefs.current[id];
         const button = buttonRefs.current[id];
         return (
@@ -91,13 +92,16 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
       });
 
       if (isOutside) {
+        console.log("[HandleOutsideClick Sidebar] Clicked outside Sidebar bro");
         setShowOptions({}); // Close all menus
       }
     };
 
-    window.addEventListener("click", handleOutsideClick);
+    console.log("[useEffect Sidebar] Adding event listener");
+    document.addEventListener("click", handleOutsideClick);
     return () => {
-      window.removeEventListener("click", handleOutsideClick);
+      console.log("[useEffect Sidebar] Removing event listener");
+      document.removeEventListener("click", handleOutsideClick);
     };
   }, []);
 
@@ -140,20 +144,21 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
                 <div key={key} className="relative">
                   <p className="text-xs align-middle pl-5 pr-3 pt-3 pb-2 sticky top-0 bg-[#171717] z-10">{key}</p>
                   {
-                    catagories[key].reverse().map((chat, index) => {
+                    catagories[key].reverse().map((chat) => {
                       // let date = new Date(`${chat.id.substring(0,4)}-${chat.id.substring(4,6)}-${chat.id.substring(6,8)}`);
                       // console.log("Maaaaaaaaaaaaaaaaaaaaaaa " + date);
                       return (
                         <>
-                          <div key={index} className="relative">
+                          <div key={chat.id} className="relative">
                             <div className={`w-auto h-10 pl-3 pr-3 ${chatID == chat.id ? "bg-[#212121]" : "bg-inherit"} hover:bg-[#212121] ml-2 mr-2 rounded-md flex items-center justify-between`}>
-                              <NavLink className="h-full w-[80%] flex items-center" key={index} to={`/${chat.id}`}>
+                              <NavLink className="h-full w-[80%] flex items-center" to={`/${chat.id}`}>
                                 <p className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] text-center">{chat.title}</p>
                               </NavLink>
                               <OptionsButton
                                   buttonRef={(el) => (buttonRefs.current[chat.id] = el)}
                                   handleClick={(e) => handleClick(e, chat.id)}
                                 />
+
                               <OptionsMenu
                                 showOptions={!!showOptions[chat.id]}
                                 reference={(el) => (menuRefs.current[chat.id] = el)}
