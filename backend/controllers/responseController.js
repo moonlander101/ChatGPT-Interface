@@ -105,6 +105,48 @@ const getStreamedResponse = async (req,res) => {
     return res.end();
 }
 
+const getStreamedResponseTemp = async (req,res) => {
+    const oldMessages = req.body.oldMessages;
+    console.log("Before submission", oldMessages)
+    // return;
+
+    res.set({
+        'Cache-Control': 'no-cache',
+        'Content-Type': 'text/event-stream',
+        'Connection': 'keep-alive'
+    });
+    res.flushHeaders();
+
+    // const message = req.body.message;
+    // oldMessages.push({ role: "user", content: message });
+
+    let om = { role: "assistant", content: "" };  
+
+    let stream = await openai.chat.completions.create({
+        // model: "meta-llama/Llama-3.2-3B-Instruct",
+        model: "gpt-4o-2024-08-06",
+        messages: [
+            { role: "system", content: "You are a helpful assistant." },
+            ...oldMessages,
+        ],
+        stream: true
+    });
+    
+    // res.write(JSON.stringify({
+    //     id : dateStr
+    // }));
+
+    for await (const chunk of stream) {
+        // console.log(chunk.choices[0]?.delta?.content || "No content");
+        // res.write(`${chunk.choices[0]?.delta?.content || ""}`);
+        res.write(chunk.choices[0]?.delta?.content || "");
+        om.content += chunk.choices[0]?.delta?.content || "";
+    }
+    oldMessages.push(om);
+    console.log("After submission",oldMessages);
+    return res.end();
+}
+
 const generateTitle = async (oldMessages) => {
 
     const completion = await openai.chat.completions.create({
@@ -159,7 +201,8 @@ module.exports = {
     getAllChatIDS,
     getOldMessages,
     handleDeleteChat,
-    clearChat
+    clearChat,
+    getStreamedResponseTemp
 };
 
 

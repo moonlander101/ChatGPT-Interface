@@ -9,7 +9,8 @@ const {
   getAllChatIDS, 
   getOldMessages, 
   clearChat,
-  handleDeleteChat
+  handleDeleteChat,
+  getStreamedResponseTemp
 } = require('./controllers/responseController')
 
 const corsMiddleWare = (req,res,next) => {
@@ -49,13 +50,9 @@ app.post('/clear', async (req, res) => {
     // return res.end()
 })
 
-app.post("/delete", async (req, res) => {
-    await handleDeleteChat(req,res);
-})
-
-app.post('/response', async (req, res) => {
-    await getStreamedResponse(req,res);
-});
+app.post('/temp', getStreamedResponseTemp)
+app.post("/delete", handleDeleteChat)
+app.post('/response', getStreamedResponse);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
