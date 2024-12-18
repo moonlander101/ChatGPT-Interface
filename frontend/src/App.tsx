@@ -20,6 +20,7 @@ export interface SidebarButtonProps {
 function App() {
   const [chats, setChats] = useState<SidebarButtonProps[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+  const [oldMessages, setOldMessages] = useState<Message[]>([]);
 
   const updateSidebar = async () => {
     try {
@@ -62,6 +63,10 @@ function App() {
     setSidebarOpen(!sidebarOpen);
   }
 
+  const handleClear = () => {
+    setOldMessages([]);
+  }
+
   return (
     <>
         <div className='relative w-[100%] h-screen flex justify-evenly'>
@@ -71,12 +76,12 @@ function App() {
               isDeleteModalOpen,
               openDeleteModal
             }}>
-              <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} chats={chats}/>
+              <Sidebar sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} chats={chats} handleClear={handleClear}/>
             </DeleteModalContext.Provider>
           </div>
           <div className={`relative w-[100%]`}>
-            <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} handleClear={()=>{}}/>
-            <Outlet context={updateSidebar}/>
+            <Navbar toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} handleClear={handleClear}/>
+            <Outlet context={{updateSidebar, oldMessages, setOldMessages}}/>
           </div>
         </div>
     </>

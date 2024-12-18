@@ -2,6 +2,7 @@
 import { useRef, useState } from 'react';
 // import Tooltip from './Tooltip';
 import Tooltip from './Tooltip';
+import { useSearchParams } from 'react-router';
 
 interface TextInputProps {
   onSubmit: (message: string) => void;
@@ -11,6 +12,8 @@ interface TextInputProps {
 const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaValue, setTextareaValue] = useState<string>('');
+
+  const [searchParams] = useSearchParams();
   // const [showTooltip, setShowTooltip] = useState<boolean>(false);
   // const timeoutRef = useRef<number | null>(null); // Ref to store the timeout ID
 
@@ -55,11 +58,11 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
     }
   };
 
-  const handleClickDiv = () => {
-    if (textareaRef.current) {
-      textareaRef.current.focus();
-    }
-  };
+  // const handleClickDiv = () => {
+  //   if (textareaRef.current) {
+  //     textareaRef.current.focus();
+  //   }
+  // };
 
   const onEnterPress = (e : React.KeyboardEvent) => {
     if(e.key == "Enter" && e.shiftKey == false && textareaValue.trim() !== '' && !isSubmitting) {
@@ -88,7 +91,7 @@ const TextInput = ({ onSubmit, isSubmitting }: TextInputProps) => {
   return (
     <form className="w-full" onSubmit={handleSubmit}>
       <div className="flex justify-center">
-        <div className='bg-[#2F2F2F] p-3 w-4/5 rounded-3xl max-w-[720px] flex items-end cursor-text' onClick={handleClickDiv}>
+        <div className={`${searchParams.get('temp_chat') !== "1" ? "bg-[#2F2F2F]" : "bg-black"} p-3 w-4/5 rounded-3xl max-w-[720px] flex items-end cursor-text' onClick={handleClickDiv}`}>
           <div className="p-1 ml-1 mr-2 rounded-lg hover:bg-[#00000033] transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-paperclip">
               <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48" />

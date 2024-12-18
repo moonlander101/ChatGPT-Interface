@@ -1,4 +1,4 @@
-import { NavLink, useNavigate, useParams } from "react-router";
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router";
 import { SidebarButtonProps } from "../App";
 import Tooltip from "./Tooltip";
 import OptionsButton from "./OptionsButton";
@@ -25,9 +25,11 @@ const getDayOfTheYear = (date: Date) => {;
 }
 
 
-function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, toggleSidebar: () => void, chats: SidebarButtonProps[] }) {
+function Sidebar({ sidebarOpen, toggleSidebar, chats, handleClear }: { sidebarOpen: boolean, toggleSidebar: () => void, chats: SidebarButtonProps[], handleClear: () => void }) {
   const navigator = useNavigate();
   const { chatID } = useParams();
+  const [searchParams] = useSearchParams();
+  const temp_chat = searchParams.get("temp_chat");
 
   const [showOptions, setShowOptions] = useState<{ [key: string]: boolean }>({});
   const menuRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
@@ -112,23 +114,33 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
         <div className="w-[100%] flex flex-col">
           <div className="w-full p-2 pl-4 pr-4 flex">
             <button onClick={toggleSidebar} disabled={!sidebarOpen}>
-                <div className="p-2 hover:backdrop-brightness-150 rounded-md">
-                    <Tooltip position="right" message="Close Sidebar">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-panels-top-left"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-                    </Tooltip>
-                </div>
+              <div className="p-2 hover:backdrop-brightness-150 rounded-md">
+                <Tooltip position="right" message="Close Sidebar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-panels-top-left"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                </Tooltip>
+              </div>
             </button>
             <div className="ml-auto">
-              <Tooltip message="New Chat" position="bottom">
-                <button disabled={!sidebarOpen} onClick={()=>{
-                    navigator('/new');
-                }}>
-                    <div className="p-2 hover:backdrop-brightness-150 rounded-md">
-                      {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-panels-top-left"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> */}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
-                    </div>
-                </button>
-              </Tooltip>
+              {temp_chat === "1" ? (
+                  <Tooltip message="Clear Chat" position={!sidebarOpen ? "bottom" : "bottom-left"}>
+                      <button onClick={handleClear}>
+                          <div className="p-2 w-fit hover:backdrop-brightness-150 rounded-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="M21 6H3"/><path d="M7 12H3"/><path d="M7 18H3"/><path d="M12 18a5 5 0 0 0 9-3 4.5 4.5 0 0 0-4.5-4.5c-1.33 0-2.54.54-3.41 1.41L11 14"/><path d="M11 10v4h4"/></svg>
+                          </div>
+                      </button>
+                  </Tooltip>
+              ) : (
+                  <Tooltip message="New Chat" position="bottom">
+                      <button onClick={()=>{
+                          navigator('/new');
+                      }}>
+                          <div className="p-2 hover:backdrop-brightness-150 rounded-md">
+                              {/* <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-panels-top-left"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg> */}
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="lucide lucide-square-pen"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></svg>
+                          </div>
+                      </button>
+                  </Tooltip>
+              )}
             </div>
           </div>
           {/* <div className="relative">
@@ -137,11 +149,11 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
                   <div className="w-8 h-8 rounded-full animate-spin absolute
                                   border-4 border-solid border-[#ececec] border-t-transparent top-0"></div>
               </div> */}
-          <div className="h-[85%] overflow-y-auto scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800 hover:scrollbar-thumb-zinc-500">
+          <div className={`h-[85%] ${temp_chat !== "1" ? "overflow-y-auto" : "overflow-y-hidden"} scrollbar-thin scrollbar-thumb-zinc-600 scrollbar-track-zinc-800 hover:scrollbar-thumb-zinc-500 relative`}>
           {
             Object.keys(catagories).reverse().map((key) => {
               return(
-                <div key={key} className="relative">
+                <div key={key} className={`relative ${temp_chat === "1" && "text-[#393939]"}`}>
                   <p className="text-xs align-middle pl-5 pr-3 pt-3 pb-2 sticky top-0 bg-[#171717] z-10">{key}</p>
                   {
                     catagories[key].reverse().map((chat) => {
@@ -150,17 +162,25 @@ function Sidebar({ sidebarOpen, toggleSidebar, chats }: { sidebarOpen: boolean, 
                       return (
                         <>
                           <div key={chat.id} className="relative">
-                            <div className={`w-auto h-10 pl-3 pr-3 ${chatID == chat.id ? "bg-[#212121]" : "bg-inherit"} hover:bg-[#212121] ml-2 mr-2 rounded-md flex items-center justify-between`}>
-                              <NavLink className="h-full w-[80%] flex items-center" to={`/${chat.id}`}>
-                                <p className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] text-center">{chat.title}</p>
-                              </NavLink>
-                              <OptionsButton
+                            <div className={`w-auto h-10 pl-3 pr-3 ${chatID == chat.id ? "bg-[#212121]" : "bg-inherit"} ${temp_chat !== "1" && "hover:bg-[#212121]"} ml-2 mr-2 rounded-md flex items-center justify-between`}>
+                              {temp_chat === "1" ? (
+                                <div className="h-full w-[80%] flex items-center">
+                                  <p className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] text-center">{chat.title}</p>
+                                </div>
+                              ) : (
+                                <>
+                                <NavLink className="h-full w-[80%] flex items-center" to={`/${chat.id}`}>
+                                  <p className="overflow-hidden text-ellipsis whitespace-nowrap text-[14px] text-center">{chat.title}</p>
+                                </NavLink>
+                                <OptionsButton
                                   buttonRef={(el) => (buttonRefs.current[chat.id] = el)}
                                   handleClick={(e) => handleClick(e, chat.id)}
                                 />
+                                </>
+                              )}
 
                               <OptionsMenu
-                                showOptions={!!showOptions[chat.id]}
+                                showOptions={showOptions[chat.id]}
                                 reference={(el) => (menuRefs.current[chat.id] = el)}
                                 chat={chat}
                               />
