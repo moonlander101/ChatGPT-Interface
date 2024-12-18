@@ -6,6 +6,8 @@ A UI (that is *somewhat* similar to ChatGPT) for the OpenAI API or any model tha
 - Temporary Chat
 - Support for math and code blocks
 
+![image](https://github.com/user-attachments/assets/0e1f5104-f6bc-4109-96d1-6bc5c01a4991)
+
 ## Setup Instructions
 
 ### Step 1: Install Dependencies
