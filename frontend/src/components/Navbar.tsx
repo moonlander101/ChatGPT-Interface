@@ -97,13 +97,14 @@ function Navbar({toggleSidebar, handleClear, sidebarOpen } : {handleClear: () =>
                                     </div>
                                 </button>
                                 <div className="w-[90%] h-[1px] mt-[2px] mb-[2px] bg-[#414141] ml-auto mr-auto"></div>
-                                <button key={"Models"} onClick={(e : React.MouseEvent)=>{
+                                {/** FOR MODEL SELECTION BUTTON */}
+                                {/* <button key={"Models"} onClick={(e : React.MouseEvent)=>{
                                     // navigate('/api');
                                     e.stopPropagation();
                                 }} className="w-full p-4 hover:bg-[#414141] text-sm rounded-lg flex">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="mr-2"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
                                     <p>Model Selection</p>
-                                </button>
+                                </button> */}
                             </div>
                         </div>
                     </div>
