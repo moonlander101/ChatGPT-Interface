@@ -270,11 +270,11 @@ function Conversation() {
           ))
         ) : (
           <div className={`flex flex-col ${temp_chat === "1" ? "justify-center" : "justify-end"} items-center h-[80%] text-[#8e8e8e]`}>
-            <p className="font-semibold text-3xl text-white">{temp_chat === "1" ? (
-              "Temporary Chat"
+            {temp_chat === "1" ? (
+              <p className="font-semibold text-2xl text-white">Temporary Chat</p>
             ) : (
-              "What can I help with?"
-            )}</p>
+              <p className="font-semibold text-3xl text-white">What can I help with?</p>
+            )}
             <p className="mt-8 w-96 text-center" hidden={temp_chat !== "1"}>
               This chat won't be saved in your history, use the refresh button at the top to clear out the current conversation and start over.
             </p>
