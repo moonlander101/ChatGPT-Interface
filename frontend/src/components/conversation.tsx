@@ -275,7 +275,7 @@ function Conversation() {
             ) : (
               <p className="font-semibold text-3xl text-white">What can I help with?</p>
             )}
-            <p className="mt-8 w-96 text-center" hidden={temp_chat !== "1"}>
+            <p className="mt-4 w-96 text-center" hidden={temp_chat !== "1"}>
               This chat won't be saved in your history, use the refresh button at the top to clear out the current conversation and start over.
             </p>
             {temp_chat === "1" && <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="mt-6"><path d="M9 10h.01"/><path d="M15 10h.01"/><path d="M12 2a8 8 0 0 0-8 8v12l3-3 2.5 2.5L12 19l2.5 2.5L17 19l3 3V10a8 8 0 0 0-8-8z"/></svg>}
