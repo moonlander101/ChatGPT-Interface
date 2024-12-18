@@ -1,11 +1,18 @@
 const OpenAI = require("openai");
+
 const CHAT_SAVE_MODES = {
     "FileSystem": 1,
     "MongoDB": 2
 }
+const MODEL_TYPE = {
+    "OpenAI" : 1,
+    "HuggingFace" : 2
+}
+
+const config = require("../configs/config.json")
 
 let Api;
-if (process.env.CHAT_SAVE_MODE === CHAT_SAVE_MODES.MongoDB.toString()) {
+if (config.CHAT_SAVE_MODE === CHAT_SAVE_MODES.MongoDB) {
     console.log("Using MongoDB");
     Api = require('../database/mongo_db');
 } else {
@@ -24,14 +31,28 @@ const {
     deleteChat
 } = Api
 
-const openai = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY
-});
+let clientOptions = {}
+
+if (config.MODEL_TYPE === MODEL_TYPE.HuggingFace) {
+    clientOptions["baseURL"] = process.env.BASE_URL
+    clientOptions["apiKey"] = process.env.HF_API_KEY
+} else {
+    clientOptions["apiKey"] = process.env.OPENAI_API_KEY
+}
+// console.log("Client options are", clientOptions)
+const openai = new OpenAI(clientOptions);
+
+// const list = openai.models.list().then(async models => {
+//     for await (const model of models) {
+//         console.log(model);
+//     }
+// });
+
 
 // Doesnt work need to change
 const getResponse = async (message) => {
     const completion = await openai.chat.completions.create({
-        model: "gpt-4o-2024-08-06",
+        model: config.model,
         messages: [
             { role: "system", content: "You are a helpful assistant." },
             ...oldMessages,
@@ -71,11 +92,12 @@ const getStreamedResponse = async (req,res) => {
 
     let stream = await openai.chat.completions.create({
         // model: "meta-llama/Llama-3.2-3B-Instruct",
-        model: "gpt-4o-2024-08-06",
+        model: config.model,
         messages: [
             { role: "system", content: "You are a helpful assistant." },
             ...oldMessages,
         ],
+        max_tokens: 500,
         stream: true
     });
     
@@ -124,11 +146,12 @@ const getStreamedResponseTemp = async (req,res) => {
 
     let stream = await openai.chat.completions.create({
         // model: "meta-llama/Llama-3.2-3B-Instruct",
-        model: "gpt-4o-2024-08-06",
+        model: config.model,
         messages: [
             { role: "system", content: "You are a helpful assistant." },
             ...oldMessages,
         ],
+        max_tokens: 500,
         stream: true
     });
     
@@ -151,7 +174,7 @@ const generateTitle = async (oldMessages) => {
 
     const completion = await openai.chat.completions.create({
         // model: "meta-llama/Llama-3.2-3B-Instruct",
-        model: "gpt-4o-2024-08-06",
+        model: config.model,
         messages: [
             { role: "system", content: "You are a helpful assistant." },
             ...oldMessages,
